@@ -1,47 +1,16 @@
 from bicicletario import Bicicleta
-from bottle import get, post, request, route, run
+from bottle import get, post, request, route, run, template
 
 
 @route('/')
 @get('/')
 def index():
-    color = request.query.get('opcao')
-
-    form =  '''
-            <h1>Escolha uma opção</h1>
-                <a href="/cadastro">Adicionar bicicleta</a>
-                <br>
-                <a href="/mostrar">Mostrar informações da bicicleta</a>
-                <br>
-                <a href="/acoes">Ações da bicicleta</a>
-                <br>
-            '''
-    page = f'''
-                <h1>Web App</h1>
-                <body style="background-color:{color};">
-                {form}
-                </body>
-            '''
-    return page
+    return template('menu_bicicletas')
 
 
 @route('/cadastro')
 def cadastro_de_bicicleta():
-    form =  '''
-            <form action="/process" method="post">
-                Qual a cor: <input type="text" name="cor">
-                <br>
-                Qual o modelo: <input type="text" name="modelo">
-                <br>
-                Qual o ano: <input type="text" name="ano">
-                <br>
-                Qual o valor: <input type="text" name="valor">
-                <br>
-                <input type="submit">
-            </form>
-            '''
-    page = f'<h1>Web App</h1>{form}'
-    return page
+    return template('form_bicicletas')
 
 
 def carregar_bicicletas():
@@ -80,14 +49,7 @@ def index_process():
 def mostrar_bicicletas():
     bicicletas = carregar_bicicletas()
 
-    page =  '''
-                <h1>Listagem de Bicicletas </h1>
-                <ul>                
-                '''
-    for bicicleta in bicicletas:
-         page += f'<li>Cor: {bicicleta.cor}, Modelo: {bicicleta.modelo}, Ano: {bicicleta.ano}, Valor: {bicicleta.valor}'
+    return template('mostrar_bicicletas', bicicletas=bicicletas)
 
-    page += '</ul>'
-    return page
 
 run(host='localhost', port=8080)

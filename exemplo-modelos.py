@@ -1,0 +1,10 @@
+"""Este exemplo carrega o modelo HTML da pasta view"""
+from bottle import route, run, template
+
+
+@route('/hello')
+@route('/hello/<name>')
+def hello(name='World'):
+    return template('hello_template', name=name)
+
+run(host='localhost', port=8080)
